@@ -42,13 +42,17 @@ public class SvrlErrorHandler implements ErrorHandler {
     private void beginSVRL() {
         writer.println("<?xml version=\"1.0\" encoding=\"" + ENCODING + "\"?>");
         writer.println("<svrl:schematron-output xmlns:svrl=\"http://purl.oclc.org/dsdl/svrl\">");
-        writer.println("\t<svrl:active-pattern/>");
-        writer.println("\t<svrl:fired-rule context=\"\"/>");
+        writer.println("\t<svrl:active-pattern name=\"RelaxNG\"/>");
         writer.flush();
     }
 
     private void endSVRL() {
         writer.println("</svrl:schematron-output>");
+        writer.flush();
+    }
+
+    public void beginDocument(String document) {
+        writer.println("\t<svrl:fired-rule context=\"" + document + "\"/>");
         writer.flush();
     }
 

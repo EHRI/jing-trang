@@ -2,6 +2,8 @@ package com.thaiopensource.validate.rng.impl;
 
 import com.thaiopensource.relaxng.pattern.Pattern;
 import com.thaiopensource.relaxng.pattern.ValidatorPatternBuilder;
+import com.thaiopensource.xml.sax.CountingErrorHandler;
+import com.thaiopensource.xml.sax.SvrlErrorHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -104,6 +106,16 @@ public class RngXpathValidator extends RngValidator {
 
     public RngXpathValidator(Pattern pattern, ValidatorPatternBuilder builder, ErrorHandler eh) {
         super(pattern, builder, eh);
+    }
+
+    @Override
+    public void startDocument() throws SAXException {
+        if (eh instanceof CountingErrorHandler) {
+            ErrorHandler eheh = ((CountingErrorHandler) eh).getErrorHandler();
+            if (eheh instanceof SvrlErrorHandler) ((SvrlErrorHandler) eheh).beginDocument(locator.getSystemId());
+        }
+
+        super.startDocument();
     }
 
     @Override
